@@ -332,6 +332,19 @@ public class StudentAttendanceService {
 		}
 		// 完了メッセージ
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
-	}
 
+	   }
+	
+	 
+	//過去日の未入力チェック	
+	public boolean notEnterCheck()throws ParseException {
+		// 今日の日付を取得する
+		Date today = new Date();
+		//未入力件数を取得する。
+		int count = tStudentAttendanceMapper.notEnterCount(today);
+		//*件数が 0 より大きければ true、そうでなければ false を戻す。
+		return count > 0;
+	
+	
+	}
 }

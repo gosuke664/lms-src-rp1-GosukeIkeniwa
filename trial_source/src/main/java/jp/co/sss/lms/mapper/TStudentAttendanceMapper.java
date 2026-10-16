@@ -65,4 +65,9 @@ public interface TStudentAttendanceMapper {
 	 */
 	Boolean update(TStudentAttendance tStudentAttendance);
 
+	//未入力件数を取得
+    int notEnterCount(Date today);
+	
+	
+	
 }

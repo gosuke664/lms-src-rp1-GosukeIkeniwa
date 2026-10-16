@@ -29,7 +29,7 @@ public class AttendanceController {
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
-
+	
 	/**
 	 * 勤怠管理画面 初期表示
 	 * 
@@ -40,15 +40,25 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index(Model model)throws ParseException {
 
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+		
+		//現在より過去に未入力が無いかチェック
+		boolean attendance = studentAttendanceService.notEnterCheck();
+		model.addAttribute("attendance", attendance);
 
 		return "attendance/detail";
 	}
+
+
+	
+	
+    
+    
 
 	/**
 	 * 勤怠管理画面 『出勤』ボタン押下
