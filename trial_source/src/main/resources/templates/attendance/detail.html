@@ -74,18 +74,18 @@
 	</div>
 
 	<script type="text/javascript" th:inline="javascript">
-		/*<![CDATA[*/
+	//	/*<![CDATA[*/
         
         // サーバー側でスコープ登録したBoolean値を受け取る (true または false が入る)
-        const attendance = /*[[${attendance}]]*/ false;
+     //   const attendance = /*[[${attendance}]]*/ false;
         
         // 画面読み込み完了時に実行
-        window.addEventListener('DOMContentLoaded', function() {
+      //  window.addEventListener('DOMContentLoaded', function() {
 		
-		if (attendance) {
-                alert("過去日の勤怠に未入力があります。");
-            }
-        });
+	//	if (attendance) {
+     //           alert("過去日の勤怠に未入力があります。");
+     //       }
+     //   });
 		
 		$(function() {
 			$("#now").text('現在の時刻は　' + getClock() + '　です。');

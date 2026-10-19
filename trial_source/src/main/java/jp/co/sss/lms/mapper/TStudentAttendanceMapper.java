@@ -66,8 +66,9 @@ public interface TStudentAttendanceMapper {
 	Boolean update(TStudentAttendance tStudentAttendance);
 
 	//未入力件数を取得
-    int notEnterCount(Date today);
-	
+//	* @param date
+	Integer notEnterCount(@Param("trainingDate")Date trainingDate,@Param("lmsUserId")Integer lmsUserId,@Param("deleteFlg")Short deleteFlg);
+
 	
 	
 }

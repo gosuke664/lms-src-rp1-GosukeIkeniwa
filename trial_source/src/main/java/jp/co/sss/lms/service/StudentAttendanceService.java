@@ -339,11 +339,12 @@ public class StudentAttendanceService {
 	//過去日の未入力チェック	
 	public boolean notEnterCheck()throws ParseException {
 		// 今日の日付を取得する
-		Date today = new Date();
+		Date date = new Date();
+		Integer lmsUserId = loginUserDto.getLmsUserId();
 		//未入力件数を取得する。
-		int count = tStudentAttendanceMapper.notEnterCount(today);
+		Integer count = tStudentAttendanceMapper.notEnterCount(date,lmsUserId,Constants.DB_FLG_FALSE);
 		//*件数が 0 より大きければ true、そうでなければ false を戻す。
-		return count > 0;
+		return  count > 0;
 	
 	
 	}
