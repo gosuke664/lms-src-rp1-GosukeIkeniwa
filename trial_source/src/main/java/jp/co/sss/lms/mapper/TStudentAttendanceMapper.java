@@ -67,7 +67,10 @@ public interface TStudentAttendanceMapper {
 
 	//未入力件数を取得
 //	* @param date
-	Integer notEnterCount(@Param("trainingDate")Date trainingDate,@Param("lmsUserId")Integer lmsUserId,@Param("deleteFlg")Short deleteFlg);
+	Integer notEnterCount(@Param("trainingDate")Date today,@Param("lmsUserId")Integer lmsUserId,@Param("deleteFlg")Short deleteFlg);
+
+
+
 
 	
 	
