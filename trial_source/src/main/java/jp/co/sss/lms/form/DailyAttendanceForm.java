@@ -2,6 +2,7 @@ package jp.co.sss.lms.form;
 
 import lombok.Data;
 
+
 /**
  * 日次の勤怠フォーム
  * 
@@ -20,6 +21,10 @@ public class DailyAttendanceForm {
 	private String trainingStartTime;
 	/** 退勤時間 */
 	private String trainingEndTime;
+	/** 時間 */
+	private Integer hour;
+	/** 分 */
+	private Integer minute;
 	/** 中抜け時間 */
 	private Integer blankTime;
 	/** 中抜け時間（画面表示用） */

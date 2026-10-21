@@ -131,6 +131,68 @@ public class AttendanceUtil {
 		}
 		return map;
 	}
+	
+	/**
+	 * 時間取得
+	 * 
+	 * @return 時間
+	 */
+	public LinkedHashMap<Integer, String> getHourMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+		for (int i = 0; i < 24; i++) { 
+			map.put(i, String.format("%02d", i)); 
+        }
+
+        return map;
+    }
+
+	/**
+	 * 分取得
+	 * 
+	 * @return 分
+	 */
+	public LinkedHashMap<Integer, String> getMinuteMap() {
+	        LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+
+	        // 空白選択肢を追加
+	        map.put(null, "");
+
+	        // 0〜59分のマップを生成 (1分刻み)
+	        for (int i = 0; i < 60; i++) {
+	        	map.put(i, String.format("%02d", i));
+	        }
+
+	        return map;
+	    }
+
+	/**
+	 * 時間（時）の切り出し
+	 *
+	 * @param time 開始時刻または終了時刻
+	 * @return 時間（時）
+	 */
+	public Integer getHour(String time) {
+		int index = time.indexOf(":");
+		return Integer.parseInt(time.substring(0,index));
+	}
+
+	
+
+
+	/**
+	 * 時間（分）の切り出し
+	 *
+	 * @param time 開始時刻または終了時刻
+	 * @return 時間（分）
+	 */
+	public Integer getMinute(String time) {
+		int index = time.indexOf(":");
+		return Integer.parseInt(time.substring(index + 1));
+	}
+	
+	
+	
 
 	/**
 	 * 研修日の判定
@@ -145,6 +207,11 @@ public class AttendanceUtil {
 			return true;
 		}
 		return false;
+		
+		
+		
+		
+		
 	}
 
 }
