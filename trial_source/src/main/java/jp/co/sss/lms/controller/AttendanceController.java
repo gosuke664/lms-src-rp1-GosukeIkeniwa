@@ -39,6 +39,13 @@ public class AttendanceController {
 	 * @return 勤怠管理画面
 	 * @throws ParseException
 	 */
+	
+	/**
+	 * author 池庭豪介 Task25
+	 * @param model
+	 * @return　attendance/detail
+	 * @throws ParseException
+	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Model model)throws ParseException {
 
