@@ -41,7 +41,6 @@ public class AttendanceController {
 	 */
 	
 	/**
-	 * author 池庭豪介 Task25
 	 * @param model
 	 * @return　attendance/detail
 	 * @throws ParseException
@@ -54,6 +53,7 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 		
+		//池庭豪介 Task25
 		//現在より過去に未入力が無いかチェック 
 		boolean attendance = studentAttendanceService.notEnterCheck();
 		model.addAttribute("attendance", attendance);

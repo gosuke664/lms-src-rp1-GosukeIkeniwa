@@ -10,7 +10,7 @@
 			AND delete_flg = #{deleteFlg} 
 		ORDER BY training_date ASC
 	</select>
-	
+<!--	池庭-->
 	<select id="notEnterCount" resultType="java.lang.Integer">
 	SELECT COUNT(*)
 	      FROM t_student_attendance

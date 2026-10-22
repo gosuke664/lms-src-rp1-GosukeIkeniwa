@@ -283,26 +283,26 @@ public class StudentAttendanceService {
 	public void formatConversion(AttendanceForm attendanceForm) {
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
 		
+			// 【出勤】「時」「分」が共に入力されている場合
+			if (dailyAttendanceForm.getStartHour() != null && dailyAttendanceForm.getStartMinute()!= null) {
+				String trainingStartTime = String.format("%02d:%02d", 
+						dailyAttendanceForm.getTrainingStartTime(), 
+						dailyAttendanceForm.getTrainingStartTime()
+						);
+				dailyAttendanceForm.setTrainingStartTime(trainingStartTime);
+			}
+			
+			// 【退勤】「時」「分」が共に入力されている場合
+			if (dailyAttendanceForm.getEndHour() != null && dailyAttendanceForm.getEndMinute() != null) {
+				String trainingEndTime = String.format("%02d:%02d", 
+						dailyAttendanceForm.getEndHour(), 
+						dailyAttendanceForm.getEndMinute()
+						);
+				dailyAttendanceForm.setTrainingEndTime(trainingEndTime);
+			}
 	    }
+	
 	}
-	        // 【出勤】「時」「分」が共に入力されている場合
-//	        if (dailyAttendanceForm.getStartHour() != null && dailyAttendanceForm.getStartMinute()!= null) {
-//	            String trainingStartTime = String.format("%02d:%02d", 
-//	            	dailyAttendanceForm.getTrainingStartTime(), 
-//	            	dailyAttendanceForm.getTrainingStartTime()
-//	            );
-//	            dailyAttendanceForm.setTrainingStartTime(trainingStartTime);
-//	        }
-//	
-//	        // 【退勤】「時」「分」が共に入力されている場合
-//	        if (dailyAttendanceForm.getEndHour() != null && dailyAttendanceForm.getEndMinute() != null) {
-//	            String trainingEndTime = String.format("%02d:%02d", 
-//	                dailyAttendanceForm.getEndHour(), 
-//	                dailyAttendanceForm.getEndMinute()
-//	            );
-//	            dailyAttendanceForm.setTrainingEndTime(trainingEndTime);
-//	         }
-//	}
 	
 	/**
 	 * 勤怠登録・更新処理
@@ -383,7 +383,13 @@ public class StudentAttendanceService {
 	   }
 	
 	 
-	//過去日の未入力チェック	
+		
+	/**
+	 * 過去日の未入力チェック
+	 * @author 池庭豪介 Task25
+	 * @return  count > 0
+	 * @throws ParseException
+	 */
 	public boolean notEnterCheck()throws ParseException {
 		// 今日の日付を取得する
 		Date today = new Date();
@@ -392,10 +398,8 @@ public class StudentAttendanceService {
 		 
 		// 文字列型の日付情報を基に、 
         // Date型の日付情報を生成（このとき日付チェックが行なわれる） 
-		date.parse(trainingDate); 
-		today = date.parse(trainingDate);
-				
-    
+		today = date.parse(trainingDate);				
+ 
 		Integer lmsUserId = loginUserDto.getLmsUserId();
 		//未入力件数を取得する。
 		Integer count = tStudentAttendanceMapper.notEnterCount(today,lmsUserId,Constants.DB_FLG_FALSE);

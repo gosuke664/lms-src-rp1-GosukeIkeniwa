@@ -70,13 +70,13 @@ public interface TStudentAttendanceMapper {
 	
 	/**
 	 * 未入力件数を取得
-	 * @param today
-	 * author 池庭豪介  – Task.25
+	 * @author 池庭豪介 – Task.25
+	 * @param trainingDate
 	 * @param lmsUserId
 	 * @param deleteFlg
-	 * @return
+	 * @return 未入力件数 
 	 */
-	Integer notEnterCount(@Param("trainingDate")Date today,@Param("lmsUserId")Integer lmsUserId,@Param("deleteFlg")Short deleteFlg);
+	Integer notEnterCount(@Param("trainingDate")Date trainingDate,@Param("lmsUserId")Integer lmsUserId,@Param("deleteFlg")Short deleteFlg);
 
 
 

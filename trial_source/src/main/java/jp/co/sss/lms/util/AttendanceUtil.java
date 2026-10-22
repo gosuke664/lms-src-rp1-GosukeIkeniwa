@@ -173,12 +173,14 @@ public class AttendanceUtil {
 	 * @return 時間（時）
 	 */
 	public Integer getHour(String time) {
+		if (time.equals("")) {
+			return null;
+		}
 		int index = time.indexOf(":");
 		return Integer.parseInt(time.substring(0,index));
-	}
-
+		
 	
-
+	}
 
 	/**
 	 * 時間（分）の切り出し
@@ -187,12 +189,12 @@ public class AttendanceUtil {
 	 * @return 時間（分）
 	 */
 	public Integer getMinute(String time) {
+		if (time.equals("")) {
+			return null;
+		}
 		int index = time.indexOf(":");
 		return Integer.parseInt(time.substring(index + 1));
 	}
-	
-	
-	
 
 	/**
 	 * 研修日の判定

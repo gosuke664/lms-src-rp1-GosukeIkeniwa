@@ -48,12 +48,29 @@
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
 								<td class="w70">
-									<input type="text" th:name="|attendanceList[${stat.index}].trainingStartTime|"
-									th:value="${dailyAttendanceForm.trainingStartTime}" class="form-control" />
+									<select th:name="|attendanceList[${stat.index}].trainingStartTime|" class="form-control">
+									<option th:each="startHour : ${attendanceForm.hour}" th:value="${startHour.key}" class="form-control" 
+									 th:selected="${startHour.key == dailyAttendanceForm.startHour}">[[${startHour.value}]]
+									 </option>
+									</select>
+								:
+								    <select th:name="|attendanceList[${stat.index}].trainingStartTime|" class="form-control">
+									<option th:each="startMinute : ${attendanceForm.hour}" th:value="${startMinute.key}" class="form-control" 
+									 th:selected="${startMinute.key == dailyAttendanceForm.startMinute}">[[${startMinute.value}]]
+									 </option>
+									</select>
 								</td>
+				
 								<td class="w70">
-									<input type="text" th:name="|attendanceList[${stat.index}].trainingEndTime|"
-									th:value="${dailyAttendanceForm.trainingEndTime}" class="form-control" />
+									<select th:name="|attendanceList[${stat.index}].trainingEndTime|" class="form-control">
+									<option th:each="endHour : ${attendanceForm.hour}" th:value="${endHour.key}" class="form-control" 
+									 th:selected="${endHour.key == dailyAttendanceForm.endHour}">[[${endHour.value}]]</option>
+									</select>
+								:	
+								    <select th:name="|attendanceList[${stat.index}].trainingEndTime|" class="form-control">
+									<option th:each="endMinute : ${attendanceForm.minute}" th:value="${endMinute.key}" class="form-control" 
+									 th:selected="${endMinute.key == dailyAttendanceForm.endMinute}">[[${endMinute.value}]]</option>
+									</select>	
 								</td>
 								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].blankTime|" class="form-control">
