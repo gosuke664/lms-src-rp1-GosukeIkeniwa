@@ -243,9 +243,14 @@ public class StudentAttendanceService {
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
 			
-			dailyAttendanceForm.setHour(attendanceUtil.getHour(attendanceManagementDto.getHour()));
+			// 出勤時間（時・分）のセット
+			dailyAttendanceForm.setStartHour(attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime()));
+			dailyAttendanceForm.setStartMinute(attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
 			
-			dailyAttendanceForm.setMinute(attendanceUtil.getMinute(attendanceManagementDto.getMinute()));
+			// 退勤時間（時・分）のセット
+			dailyAttendanceForm.setEndHour(attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
+			dailyAttendanceForm.setEndMinute(attendanceUtil.getMinute(attendanceManagementDto.getTrainingEndTime()));
+			
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
@@ -270,6 +275,35 @@ public class StudentAttendanceService {
 		return attendanceForm;
 	}
 
+     /*
+	 *入力された出退勤の[時間][分]をhh:mm形式に変換し、AttendanceFormにセットする
+	 * 
+	 * @param attendanceForm 勤怠フォーム
+	 */
+	public void formatConversion(AttendanceForm attendanceForm) {
+		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+		
+	    }
+	}
+	        // 【出勤】「時」「分」が共に入力されている場合
+//	        if (dailyAttendanceForm.getStartHour() != null && dailyAttendanceForm.getStartMinute()!= null) {
+//	            String trainingStartTime = String.format("%02d:%02d", 
+//	            	dailyAttendanceForm.getTrainingStartTime(), 
+//	            	dailyAttendanceForm.getTrainingStartTime()
+//	            );
+//	            dailyAttendanceForm.setTrainingStartTime(trainingStartTime);
+//	        }
+//	
+//	        // 【退勤】「時」「分」が共に入力されている場合
+//	        if (dailyAttendanceForm.getEndHour() != null && dailyAttendanceForm.getEndMinute() != null) {
+//	            String trainingEndTime = String.format("%02d:%02d", 
+//	                dailyAttendanceForm.getEndHour(), 
+//	                dailyAttendanceForm.getEndMinute()
+//	            );
+//	            dailyAttendanceForm.setTrainingEndTime(trainingEndTime);
+//	         }
+//	}
+	
 	/**
 	 * 勤怠登録・更新処理
 	 * 

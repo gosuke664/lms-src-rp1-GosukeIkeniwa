@@ -22,10 +22,14 @@ public class StudentAttendanceDto {
 	private String trainingStartTime;
 	/** 退勤時間 */
 	private String trainingEndTime;
-	/** 時間 */
-	private String hour;
-	/** 分 */
-	private String minute;
+	/** 出勤時間（時） */
+	private String startHour;
+	/** 出勤時間（分） */
+	private String startMinute;
+	/** 退勤時間（時） */
+	private String endHour;
+	/** 退勤時間（分） */
+	private String endMinute;
 	/** 勤怠状況 */
 	private Short status;
 	/** 備考 */

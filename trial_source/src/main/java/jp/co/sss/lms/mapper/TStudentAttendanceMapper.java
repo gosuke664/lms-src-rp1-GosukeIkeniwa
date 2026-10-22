@@ -65,8 +65,17 @@ public interface TStudentAttendanceMapper {
 	 */
 	Boolean update(TStudentAttendance tStudentAttendance);
 
-	//未入力件数を取得
-//	* @param date
+	
+	
+	
+	/**
+	 * 未入力件数を取得
+	 * @param today
+	 * author 池庭豪介  – Task.25
+	 * @param lmsUserId
+	 * @param deleteFlg
+	 * @return
+	 */
 	Integer notEnterCount(@Param("trainingDate")Date today,@Param("lmsUserId")Integer lmsUserId,@Param("deleteFlg")Short deleteFlg);
 
 
