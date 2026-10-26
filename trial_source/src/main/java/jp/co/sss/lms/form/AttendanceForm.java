@@ -35,6 +35,8 @@ public class AttendanceForm {
 	private LinkedHashMap<Integer, String> hour;
 	/** 分(プルダウン) */
 	private LinkedHashMap<Integer, String> minute;
+	/** 備考 */
+	private String note;
 	
 	
 }

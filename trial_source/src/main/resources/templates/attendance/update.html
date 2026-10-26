@@ -48,31 +48,58 @@
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
 								<td class="w70">
-									<select th:name="|attendanceList[${stat.index}].trainingStartTime|" class="form-control">
-									<option th:each="startHour : ${attendanceForm.hour}" th:value="${startHour.key}" class="form-control" 
-									 th:selected="${startHour.key == dailyAttendanceForm.startHour}">[[${startHour.value}]]
-									 </option>
+									<div style="display: flex; align-items: center; gap: 5px; white-space: nowrap;">
+									<select th:name="|attendanceList[${stat.index}].trainingStartTime|"
+									class="form-control" style="width: auto; min-width: 60px;">
+									<option th:each="time : ${attendanceForm.hour}"
+									th:value="${time.key}"
+									th:text="${time.value}"
+									th:selected="${time.key == dailyAttendanceForm.trainingStartTime}">
+									</option>
 									</select>
-								:
-								    <select th:name="|attendanceList[${stat.index}].trainingStartTime|" class="form-control">
-									<option th:each="startMinute : ${attendanceForm.hour}" th:value="${startMinute.key}" class="form-control" 
-									 th:selected="${startMinute.key == dailyAttendanceForm.startMinute}">[[${startMinute.value}]]
-									 </option>
+
+									
+									<span>：</span>
+
+									
+									<select th:name="|attendanceList[${stat.index}].trainingStartMinute|"
+									class="form-control" style="width: auto; min-width: 60px;">class="form-control">
+									<option th:each="time : ${attendanceForm.minute}"
+									th:value="${time.key}"
+									th:text="${time.value}">
+									</option>
 									</select>
-								</td>
-				
-								<td class="w70">
-									<select th:name="|attendanceList[${stat.index}].trainingEndTime|" class="form-control">
-									<option th:each="endHour : ${attendanceForm.hour}" th:value="${endHour.key}" class="form-control" 
-									 th:selected="${endHour.key == dailyAttendanceForm.endHour}">[[${endHour.value}]]</option>
+									</div>
+									</td>
+									
+									
+									<!-- 退勤 -->
+									
+									<td>
+									<div style="display: flex; align-items: center; gap: 5px; white-space: nowrap;">
+									<select th:name="|attendanceList[${stat.index}].trainingEndTime|"
+									class="form-control" style="width: auto; min-width: 60px;">
+									<option th:each="time : ${attendanceForm.hour}"
+									th:value="${time.key}"
+									th:text="${time.value}"
+									th:selected="${time.key == dailyAttendanceForm.trainingEndTime}">
+									</option>
 									</select>
-								:	
-								    <select th:name="|attendanceList[${stat.index}].trainingEndTime|" class="form-control">
-									<option th:each="endMinute : ${attendanceForm.minute}" th:value="${endMinute.key}" class="form-control" 
-									 th:selected="${endMinute.key == dailyAttendanceForm.endMinute}">[[${endMinute.value}]]</option>
-									</select>	
-								</td>
-								<td class="w80">
+
+									
+									<span>：</span>
+									
+
+									<select th:name="|attendanceList[${stat.index}].trainingEndMinute|"
+									class="form-control" style="width: auto; min-width: 60px;">
+									<option th:each="time : ${attendanceForm.minute}"
+									th:value="${time.key}"
+									th:text="${time.value}">
+									</option>
+									</select>
+									</div>
+									
+								<td class="w90">
 									<select th:name="|attendanceList[${stat.index}].blankTime|" class="form-control">
 										<option th:each="blankTime : ${attendanceForm.blankTimes}" th:value="${blankTime.key}" th:inlne="text" class="form-control" 
 											th:selected="${blankTime.key == dailyAttendanceForm.blankTime}">[[${blankTime.value}]]</option>
@@ -94,12 +121,24 @@
 					<th:block th:if="${session.loginUserDto.role != '0001'}">
 						<input type="submit" value="戻る" name="indexCompany" class="btn btn-default" />
 					</th:block>
-					<input type="submit" value="更新" name="complete" class="btn btn-info" />
+					<input type="submit" value="更新" name="complete" class="btn btn-info" 
+					onclick="return registCheck()"/>
+					
 				</div>
 
 			</form>
 		</div>
 	</div>
-
+  <script type="text/javascript" th:inline="javascript">
+	       function registCheck() {
+        if (confirm("更新します。よろしいですか？")) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+	  
+  </script>
 </body>
 </html>

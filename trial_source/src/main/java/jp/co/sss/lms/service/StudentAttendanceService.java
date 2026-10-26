@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
@@ -303,6 +305,44 @@ public class StudentAttendanceService {
 	    }
 	
 	}
+	
+	
+	    //入力パラメータ．勤怠リスト[n]の件数分、下記チェックを行う
+		public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
+		        
+        // リスト内の要素をループ処理
+        for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+            
+            // 備考（note）が100文字を超えているか判定
+            if (dailyAttendanceForm.getNote() != null && dailyAttendanceForm.getNote().length() > 100) {
+                
+                // BindingResult にエラーを追加）
+//                FieldError fieldError = new FieldError(
+////                    result.attendanceForm(), 
+//                    "note", 
+//                    "備考は100文字以内で入力してください"
+////                );
+//                result.addError(fieldError); //
+            }
+        }
+        
+        // void メソッドのため、ここで return は不要（または値なしの return; のみ）
+    }
+
+    // ② エラーメッセージを一括取得するメソッド
+    public String addAllErrors(BindingResult result) {
+        String errorMessages = "";
+        for (ObjectError error : result.getAllErrors()) {
+            // ここでメッセージを取得する
+            errorMessages += error.getDefaultMessage();
+        }
+        return errorMessages;
+    }
+
+	
+	
+
+	
 	
 	/**
 	 * 勤怠登録・更新処理

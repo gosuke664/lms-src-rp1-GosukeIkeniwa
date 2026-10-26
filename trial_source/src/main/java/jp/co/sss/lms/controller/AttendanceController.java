@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -135,7 +138,50 @@ public class AttendanceController {
 		model.addAttribute("attendanceForm", attendanceForm);
 
 		return "attendance/update";
+		
 	}
+	
+	
+		@Autowired
+	    private StudentAttendanceService attendanceService;
+
+	    @PostMapping("/attendance")
+	    public String register(
+	            @Validated AttendanceForm attendanceForm,
+	            BindingResult bindingResult, // 
+	            Model model) {
+
+	        // 1. Service を呼び出してバリデーション（ここで FieldError が追加される）
+	        attendanceService.updateInputCheck(attendanceForm, bindingResult);
+
+	        // 2. エラーが存在するかどうかチェック
+	        if (bindingResult.hasErrors()) {
+
+	            // 3. エラーメッセージを取得して Model に登録
+	            String errorMessage = addAllErrors(bindingResult);
+	            model.addAttribute("errorMessage", errorMessage);
+
+	            // 4. エラー時の画面遷移（入力画面に戻る）
+	            return "attendance/update";
+	        }
+
+	        // 5. エラーがない場合の処理・リダイレクト
+	        return "redirect:/attendance/update";
+	    }
+
+	    // エラーメッセージを取得するメソッド（画像2つ目のコード）
+	    public String addAllErrors(BindingResult result) {
+	        String errorMessages = "";
+	        for (ObjectError error : result.getAllErrors()) {
+	            // ここでメッセージを取得する
+	            errorMessages += error.getDefaultMessage();
+	        }
+	        return errorMessages;
+	    
+	}
+		        
+		    
+	
 
 	/**
 	 * 勤怠情報直接変更画面 『更新』ボタン押下
