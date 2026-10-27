@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -17,6 +15,7 @@ import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
+import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
 
 /**
@@ -32,6 +31,8 @@ public class AttendanceController {
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
+	@Autowired
+	private AttendanceUtil attendanceUtil;
 	
 	/**
 	 * 勤怠管理画面 初期表示
@@ -64,10 +65,6 @@ public class AttendanceController {
 		return "attendance/detail";
 	}
 
-
-	
-	
-    
     
 
 	/**
@@ -141,32 +138,6 @@ public class AttendanceController {
 		
 	}
 	
-	
-		@Autowired
-	    private StudentAttendanceService studentattendanceService;
-
-	    @PostMapping("/attendance")
-	    public String register(@Validated AttendanceForm attendanceForm,
-         BindingResult bindingResult,Model model) {
-
-	        // 1. Service を呼び出してバリデーション（ここで FieldError が追加される）
-	    	studentattendanceService.updateInputCheck(attendanceForm, bindingResult);
-
-	        // 2. エラーが存在するかどうかチェック
-	        if (bindingResult.hasErrors()) {
-
-	            // 3. エラーメッセージを取得して Model に登録
-	            String errorMessage = addAllErrors(bindingResult);
-	            model.addAttribute("errorMessage", errorMessage);
-
-	            // 4. エラー時の画面遷移（入力画面に戻る）
-	            return "attendance/update";
-	        }
-
-	        // 5. エラーがない場合の処理・リダイレクト
-	        return "redirect:/attendance/update";
-	    }
-
 	    // エラーメッセージを取得するメソッド
 	    public String addAllErrors(BindingResult result) {
 	        String errorMessages = "";
@@ -191,18 +162,37 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
+	public String complete(AttendanceForm attendanceForm, BindingResult result,Model model)
 			throws ParseException {
+		
+		//Task26
+		studentAttendanceService.formatConversion(attendanceForm);
+		
+		// 1. Service を呼び出してバリデーション（ここで FieldError が追加される）
+    	studentAttendanceService.updateInputCheck(attendanceForm, result);
+	
+    	
+        // 2. 入力画面に戻す
+    	
+    	if (result.hasErrors()) {
+    		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+    		attendanceForm.setHour(attendanceUtil.getHourMap());
+    		attendanceForm.setMinute(attendanceUtil.getMinuteMap());
+    		    
+        return "attendance/update";
+    	
+    	}  
+		// 3. エラーがない場合のみ DB 更新処理を実行
+	    String message = studentAttendanceService.update(attendanceForm);
+	    model.addAttribute("message", message);
 
-		// 更新
-		String message = studentAttendanceService.update(attendanceForm);
-		model.addAttribute("message", message);
-		// 一覧の再取得
-		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
-		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
-
-		return "attendance/detail";
+	    // 一覧の再取得
+	    	List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
+	    			.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+	    	model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+	    return "attendance/detail";
+     	
 	}
-
+ 
 }
+

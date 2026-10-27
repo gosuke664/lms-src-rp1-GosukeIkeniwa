@@ -1,5 +1,7 @@
 package jp.co.sss.lms.service;
 
+
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
@@ -312,37 +313,70 @@ public class StudentAttendanceService {
 		public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
 		        
         // リスト内の要素をループ処理
-        for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
-            
+			List<DailyAttendanceForm> attendanceList = attendanceForm.getAttendanceList();
+		    
+		    if (attendanceList == null) {
+		        return;
+		    }
+
+		    for (int i = 0; i < attendanceList.size(); i++) {
+		        DailyAttendanceForm dailyAttendanceForm = attendanceList.get(i);
+		        
             // 備考（note）が100文字を超えているか判定
             if (dailyAttendanceForm.getNote().length() > 100) {
-                
+            	
+            String fieldPath = "attendanceList[" + i + "].note";
                 // BindingResult にエラーを追加）
                 FieldError fieldError = new FieldError(
-                	result.getObjectName(),
-                    "note", 
+                    result.getObjectName(),
+                    fieldPath, 
                     "備考の長さが最大値100を超えています。"
                 );
-                result.addError(fieldError); //
+                result.addError(fieldError); 
             }
-        }
-        
-        // void メソッドのため、ここで return は不要（または値なしの return; のみ）
-    }
+         }  
+	}
 
-    // ② エラーメッセージを一括取得するメソッド
-    public String addAllErrors(BindingResult result) {
-        String errorMessages = "";
-        for (ObjectError error : result.getAllErrors()) {
-            // ここでメッセージを取得する
-            errorMessages += error.getDefaultMessage();
-        }
-        return errorMessages;
-    }
+//   // ② エラーメッセージを取得するメソッド
+//    public String addError(BindingResult result) {
+//        String errorMessages = "";
+//        for (ObjectError error : result.getAllErrors()) {
+//            // ここでメッセージを取得する
+//            errorMessages += error.getDefaultMessage();
+//        }
+//        return errorMessages;
+//    }
+//
+//    public static BindingResult addError(BindingResult bindingResult, Map<String, String> errorMap) {
+//		for (Map.Entry<String, String> entry : errorMap.entrySet()) {
+//			FieldError fieldError = new FieldError(
+//					bindingResult.getObjectName(), entry.getKey(), entry.getValue());
+//		            bindingResult.addError(fieldError);
+//	}
+//		    return bindingResult;
+    
+	    // リスト内の要素をループ処理
+//		String startHour = dailyAttendanceForm.getstartHour(); 
+//        String startMinute = dailyAttendanceForm.getstartMinute(); 
+//
+//        boolean hasTime = startHour != null && !"".equals(startHour.trim());
+//        boolean hasMinute = startMinute != null && !"".equals(startMinute.trim());
+//        {
+        // 片方のみ入力されている判定 (XOR)
+//        if (hasTime ^ hasMinute) {
+//            Object[] args = new Object[]{"出勤時間"};
+//            result.rejectValue(
+//                String.format("attendanceList[%d].trainingStartTime", i),
+//                "input.invalid",
+//                args,
+//                "出勤時間を正しく入力してください"
+//            );
+//              }
+//            }
+//	}
 
-	
-	
-
+    
+  
 	
 	
 	/**

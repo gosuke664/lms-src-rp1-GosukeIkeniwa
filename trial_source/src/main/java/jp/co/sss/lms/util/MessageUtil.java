@@ -45,5 +45,4 @@ public class MessageUtil {
 		}
 		return message;
 	}
-
 }
