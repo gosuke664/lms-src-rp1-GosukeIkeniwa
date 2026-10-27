@@ -143,16 +143,14 @@ public class AttendanceController {
 	
 	
 		@Autowired
-	    private StudentAttendanceService attendanceService;
+	    private StudentAttendanceService studentattendanceService;
 
 	    @PostMapping("/attendance")
-	    public String register(
-	            @Validated AttendanceForm attendanceForm,
-	            BindingResult bindingResult, // 
-	            Model model) {
+	    public String register(@Validated AttendanceForm attendanceForm,
+         BindingResult bindingResult,Model model) {
 
 	        // 1. Service を呼び出してバリデーション（ここで FieldError が追加される）
-	        attendanceService.updateInputCheck(attendanceForm, bindingResult);
+	    	studentattendanceService.updateInputCheck(attendanceForm, bindingResult);
 
 	        // 2. エラーが存在するかどうかチェック
 	        if (bindingResult.hasErrors()) {
@@ -169,7 +167,7 @@ public class AttendanceController {
 	        return "redirect:/attendance/update";
 	    }
 
-	    // エラーメッセージを取得するメソッド（画像2つ目のコード）
+	    // エラーメッセージを取得するメソッド
 	    public String addAllErrors(BindingResult result) {
 	        String errorMessages = "";
 	        for (ObjectError error : result.getAllErrors()) {

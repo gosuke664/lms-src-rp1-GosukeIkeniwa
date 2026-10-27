@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
@@ -314,15 +315,15 @@ public class StudentAttendanceService {
         for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
             
             // 備考（note）が100文字を超えているか判定
-            if (dailyAttendanceForm.getNote() != null && dailyAttendanceForm.getNote().length() > 100) {
+            if (dailyAttendanceForm.getNote().length() > 100) {
                 
                 // BindingResult にエラーを追加）
-//                FieldError fieldError = new FieldError(
-////                    result.attendanceForm(), 
-//                    "note", 
-//                    "備考は100文字以内で入力してください"
-////                );
-//                result.addError(fieldError); //
+                FieldError fieldError = new FieldError(
+                	result.getObjectName(),
+                    "note", 
+                    "備考の長さが最大値100を超えています。"
+                );
+                result.addError(fieldError); //
             }
         }
         
