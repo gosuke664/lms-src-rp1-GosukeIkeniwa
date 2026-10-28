@@ -290,8 +290,8 @@ public class StudentAttendanceService {
 			// 【出勤】「時」「分」が共に入力されている場合
 			if (dailyAttendanceForm.getStartHour() != null && dailyAttendanceForm.getStartMinute()!= null) {
 				String trainingStartTime = String.format("%02d:%02d", 
-						dailyAttendanceForm.getTrainingStartTime(), 
-						dailyAttendanceForm.getTrainingStartTime()
+						dailyAttendanceForm.getStartHour(), 
+						dailyAttendanceForm.getStartMinute()
 						);
 				dailyAttendanceForm.setTrainingStartTime(trainingStartTime);
 			}
@@ -320,7 +320,7 @@ public class StudentAttendanceService {
 		    }
 		    for (int i = 0; i < attendanceList.size(); i++) {
 		        DailyAttendanceForm dailyAttendanceForm = attendanceList.get(i);
-		        
+		      
             // 備考（note）が100文字を超えているか判定
             if (dailyAttendanceForm.getNote().length() > 100) {
             	
@@ -333,8 +333,7 @@ public class StudentAttendanceService {
                 );
                 result.addError(fieldError); 
              }
-		   }
-		}		
+	
 //   // ② エラーメッセージを取得するメソッド
 //    public String addError(BindingResult result) {
 //        String errorMessages = "";
@@ -354,28 +353,95 @@ public class StudentAttendanceService {
 //		    return bindingResult;
     
 	    // リスト内の要素をループ処理
-		
-//        boolean startHourEmpty = (dailyAttendanceForm.getStartHour() == null);
-//        boolean startMinEmpty = (dailyAttendanceForm.getStartMinute() == null);
-//        if (startHourEmpty ^ startMinEmpty) { // 片方のみ入力されている場合
-//            result.addError(new FieldError(
-//                result.getObjectName(),
-//                 "trainingStartTime",
-//                "出勤時間が正しく入力されていません。"
-//            ));
-//		    }
+        boolean startHourEmpty = (dailyAttendanceForm.getStartHour() == null);
+        boolean startMinEmpty = (dailyAttendanceForm.getStartMinute() == null);
+        if (startHourEmpty ^ startMinEmpty) { // 片方のみ入力されている場合
+            result.addError(new FieldError(
+                result.getObjectName(),
+                 "attendanceList[" + i + "].trainingStartTime",
+                "出勤時間が正しく入力されていません。"
+            ));
+		    }
         
-//        boolean endHourEmpty = (dailyAttendanceForm.getEndHour() == null);
-//        boolean endMinEmpty  = (dailyAttendanceForm.getEndMinute() == null);
-//        if (endHourEmpty ^ endMinEmpty) {
-//            result.addError(new FieldError(
-//                result.getObjectName(),
-//                "trainingEndTime",
-//                "退勤時刻が正しく入力されていません。"
-//            ));
-//        }
-//      }
-//   }
+        boolean endHourEmpty = (dailyAttendanceForm.getEndHour() == null);
+        boolean endMinEmpty  = (dailyAttendanceForm.getEndMinute() == null);
+        if (endHourEmpty ^ endMinEmpty) {
+            result.addError(new FieldError(
+                result.getObjectName(),
+                "attendanceList[" + i + "].trainingEndTime",
+                "退勤時刻が正しく入力されていません。"
+            ));
+        }
+
+		
+		boolean hasStart = !startHourEmpty && !startMinEmpty;
+        boolean hasEnd   = !endHourEmpty && !endMinEmpty;
+
+        if (!hasStart && hasEnd) {
+            result.addError(new FieldError(
+                result.getObjectName(),
+                "attendanceList[" + i + "].startHour",
+                "出勤情報がないため退勤情報を入力出来ません。"
+            ));
+        }	
+        
+        boolean timeOrderError = false;
+        if (hasStart && hasEnd) {
+            int startTotalMinutes = (dailyAttendanceForm.getStartHour()) * 60 
+                                  + (dailyAttendanceForm.getStartMinute());
+            int endTotalMinutes   = (dailyAttendanceForm.getEndHour()) * 60 
+                                  + (dailyAttendanceForm.getEndMinute());
+
+            if (startTotalMinutes > endTotalMinutes) {
+                timeOrderError = true;
+
+              // フォームから入力値を自動取得して "時:分" の文字列を作成
+                String startTimeStr = String.format("%02d:%02d", 
+                        (dailyAttendanceForm.getStartHour()), 
+                        (dailyAttendanceForm.getStartMinute()));
+                
+                String endTimeStr = String.format("%02d:%02d", 
+                        (dailyAttendanceForm.getEndHour()), 
+                        (dailyAttendanceForm.getEndMinute()));
+
+                // {0} に退勤時刻(endTimeStr)、{0} に出勤時刻(startTimeStr) をセット
+                Object[] errorArgs = new Object[]{ endTimeStr, startTimeStr };
+
+                result.addError(new FieldError(
+                    result.getObjectName(),
+                    "attendanceList[" + i + "].endHour",
+                    dailyAttendanceForm.getEndHour(),
+                    false,
+                    new String[]{"error.timeOrder"}, 
+                    errorArgs,                       
+                    "退勤時刻{0}は出勤時刻{0}より後でなければいけません。" 
+                ));
+            }
+        
+            
+	        if (!timeOrderError && hasStart && hasEnd && dailyAttendanceForm.getBlankTime() != null) {
+	             startTotalMinutes = (dailyAttendanceForm.getStartHour()) * 60 
+	                                  + (dailyAttendanceForm.getStartMinute());
+	             endTotalMinutes   = (dailyAttendanceForm.getEndHour()) * 60 
+	                                  + (dailyAttendanceForm.getEndMinute());
+	
+	            int totalStayMinutes = endTotalMinutes - startTotalMinutes; // 滞在時間（分）
+	            
+	            
+	            int breakMinutes = dailyAttendanceForm.getBlankTime(); 
+	
+	            if (breakMinutes > totalStayMinutes) {
+	                result.addError(new FieldError(
+	                    result.getObjectName(),
+	                    "attendanceList[" + i + "].breakTime",
+	                    "中抜け時間が勤務時間を超えています。"
+	                ));
+	            }
+	        }
+         }
+       }
+    }
+
 	
 	/**
 	 * 勤怠登録・更新処理

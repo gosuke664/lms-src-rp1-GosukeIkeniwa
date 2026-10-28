@@ -20,7 +20,13 @@ div.contract {
 
 .errorInput {
 	background-color: #FFD2D2;
-	border-color: red;
+	border-color: red;	
+}
+
+.error-item {
+  color: #c93a3a;  
+  font-weight: bold; 
+  font-size: 14px;
 }
 
 .warnInput {

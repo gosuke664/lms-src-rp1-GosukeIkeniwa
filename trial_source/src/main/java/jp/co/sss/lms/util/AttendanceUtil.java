@@ -173,7 +173,7 @@ public class AttendanceUtil {
 	 * @return 時間（時）
 	 */
 	public Integer getHour(String time) {
-		if (time.equals("")) {
+		if (time ==null||"".equals(time)) {
 			return null;
 		}
 		int index = time.indexOf(":");
@@ -189,7 +189,7 @@ public class AttendanceUtil {
 	 * @return 時間（分）
 	 */
 	public Integer getMinute(String time) {
-		if (time.equals("")) {
+		if (time ==null||"".equals(time)) {
 			return null;
 		}
 		int index = time.indexOf(":");
