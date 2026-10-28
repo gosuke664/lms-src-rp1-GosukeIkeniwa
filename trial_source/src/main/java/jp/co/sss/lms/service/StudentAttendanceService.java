@@ -318,7 +318,6 @@ public class StudentAttendanceService {
 		    if (attendanceList == null) {
 		        return;
 		    }
-
 		    for (int i = 0; i < attendanceList.size(); i++) {
 		        DailyAttendanceForm dailyAttendanceForm = attendanceList.get(i);
 		        
@@ -333,10 +332,9 @@ public class StudentAttendanceService {
                     "備考の長さが最大値100を超えています。"
                 );
                 result.addError(fieldError); 
-            }
-         }  
-	}
-
+             }
+		   }
+		}		
 //   // ② エラーメッセージを取得するメソッド
 //    public String addError(BindingResult result) {
 //        String errorMessages = "";
@@ -356,28 +354,28 @@ public class StudentAttendanceService {
 //		    return bindingResult;
     
 	    // リスト内の要素をループ処理
-//		String startHour = dailyAttendanceForm.getstartHour(); 
-//        String startMinute = dailyAttendanceForm.getstartMinute(); 
-//
-//        boolean hasTime = startHour != null && !"".equals(startHour.trim());
-//        boolean hasMinute = startMinute != null && !"".equals(startMinute.trim());
-//        {
-        // 片方のみ入力されている判定 (XOR)
-//        if (hasTime ^ hasMinute) {
-//            Object[] args = new Object[]{"出勤時間"};
-//            result.rejectValue(
-//                String.format("attendanceList[%d].trainingStartTime", i),
-//                "input.invalid",
-//                args,
-//                "出勤時間を正しく入力してください"
-//            );
-//              }
-//            }
-//	}
-
-    
-  
-	
+		
+//        boolean startHourEmpty = (dailyAttendanceForm.getStartHour() == null);
+//        boolean startMinEmpty = (dailyAttendanceForm.getStartMinute() == null);
+//        if (startHourEmpty ^ startMinEmpty) { // 片方のみ入力されている場合
+//            result.addError(new FieldError(
+//                result.getObjectName(),
+//                 "trainingStartTime",
+//                "出勤時間が正しく入力されていません。"
+//            ));
+//		    }
+        
+//        boolean endHourEmpty = (dailyAttendanceForm.getEndHour() == null);
+//        boolean endMinEmpty  = (dailyAttendanceForm.getEndMinute() == null);
+//        if (endHourEmpty ^ endMinEmpty) {
+//            result.addError(new FieldError(
+//                result.getObjectName(),
+//                "trainingEndTime",
+//                "退勤時刻が正しく入力されていません。"
+//            ));
+//        }
+//      }
+//   }
 	
 	/**
 	 * 勤怠登録・更新処理

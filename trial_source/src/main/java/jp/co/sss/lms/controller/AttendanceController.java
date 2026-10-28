@@ -165,7 +165,7 @@ public class AttendanceController {
 	public String complete(AttendanceForm attendanceForm, BindingResult result,Model model)
 			throws ParseException {
 		
-		//Task26
+		//Task26で追加したmapをserviceクラスから呼び出す
 		studentAttendanceService.formatConversion(attendanceForm);
 		
 		// 1. Service を呼び出してバリデーション（ここで FieldError が追加される）
