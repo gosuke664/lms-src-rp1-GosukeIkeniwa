@@ -352,7 +352,7 @@ public class StudentAttendanceService {
 //	}
 //		    return bindingResult;
     
-	    // リスト内の要素をループ処理
+          //時刻の「時」だけ、「分」だけといった片側未入力チェック。(出勤時間) 
         boolean startHourEmpty = (dailyAttendanceForm.getStartHour() == null);
         boolean startMinEmpty = (dailyAttendanceForm.getStartMinute() == null);
         if (startHourEmpty ^ startMinEmpty) { // 片方のみ入力されている場合
@@ -363,6 +363,7 @@ public class StudentAttendanceService {
             ));
 		    }
         
+        //時刻の「時」だけ、「分」だけといった片側未入力チェック。(退勤時刻) 
         boolean endHourEmpty = (dailyAttendanceForm.getEndHour() == null);
         boolean endMinEmpty  = (dailyAttendanceForm.getEndMinute() == null);
         if (endHourEmpty ^ endMinEmpty) {
@@ -373,18 +374,19 @@ public class StudentAttendanceService {
             ));
         }
 
-		
+        //「出勤なし、退勤あり」の矛盾チェック。
 		boolean hasStart = !startHourEmpty && !startMinEmpty;
         boolean hasEnd   = !endHourEmpty && !endMinEmpty;
 
         if (!hasStart && hasEnd) {
             result.addError(new FieldError(
                 result.getObjectName(),
-                "attendanceList[" + i + "].startHour",
+                "attendanceList[" + i + "].trainingStartTime",
                 "出勤情報がないため退勤情報を入力出来ません。"
             ));
         }	
         
+        //出勤時刻 ＞ 退勤時刻 になっていないか比較チェック。
         boolean timeOrderError = false;
         if (hasStart && hasEnd) {
             int startTotalMinutes = (dailyAttendanceForm.getStartHour()) * 60 
@@ -418,7 +420,7 @@ public class StudentAttendanceService {
                 ));
             }
         
-            
+            //出退勤の差分から計算される最大受講時間よりも中抜け時間が長くないかチェック。
 	        if (!timeOrderError && hasStart && hasEnd && dailyAttendanceForm.getBlankTime() != null) {
 	             startTotalMinutes = (dailyAttendanceForm.getStartHour()) * 60 
 	                                  + (dailyAttendanceForm.getStartMinute());
